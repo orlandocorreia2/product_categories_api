@@ -1,0 +1,29 @@
+services:
+  app:
+    command: tcp db:3306 -t 30s -i 250ms
+    container_name: product_category_app
+    build: .
+    volumes:
+      - .:/var/www/html
+    ports:
+      - 9000:80
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: mysql:8.0.30-debian
+    container_name: product_category_db
+    volumes:
+      - ./_docker/dbdata:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=product_category
+    security_opt:
+      - seccomp:unconfined
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 10s
+      retries: 3
