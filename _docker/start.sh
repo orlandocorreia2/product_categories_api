@@ -8,4 +8,6 @@ composer install
 
 php artisan migrate
 
+chmod -R 777 .
+
 tail -f /dev/null

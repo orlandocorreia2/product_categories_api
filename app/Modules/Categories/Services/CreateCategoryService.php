@@ -22,7 +22,7 @@ class CreateCategoryService implements CreateCategoryServiceInterface
     public function execute(CreateCategoryRequest $request): Category {
         $category = $this->categoryRepositoryInterface->create([
             'description' => $request->description,
-            'status' => $request->status || true
+            'status' => isset($request->status) ? $request->status : true
         ]);
         if (!$category) {
             throw new SystemUnavailableException('Category cannot be created, please try again later');
